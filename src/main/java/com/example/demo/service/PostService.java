@@ -31,8 +31,8 @@ public class PostService {
   }
 
   public void update(long userId, PostRequest request) {
-    PostEntity updatePost = postRepostiory.save(userId, request);
-    updatePost.update(request.getTitle(), request.getContent(), request.getAuthor());
+    PostEntity targetPost = postRepostiory.findById(userId);
+    targetPost.update(request.getTitle(), request.getContent(), request.getAuthor());
   }
 
   public void delete(long id) {

@@ -38,8 +38,7 @@ public class PostController {
   public PostResponse createPost(
       @RequestBody PostRequest postRequest) {
     log.info("POST /api/posts={}", postRequest);
-    PostResponse response = postService.save(postRequest);
-    return response;
+    return postService.save(postRequest);
   }
 
   @GetMapping("/{id}")
@@ -55,7 +54,7 @@ public class PostController {
   public void updatePost(
       @RequestBody PostRequest request,
       @PathVariable("id") Long userId) {
-    log.debug("PUT /api/posts/{}={}", userId, request);
+    log.info("PUT /api/posts/{}={}", userId, request);
     postService.update(userId, request);
   }
 
@@ -63,7 +62,7 @@ public class PostController {
   public void deletePost(
       @PathVariable Long id
   ) {
-    log.info("id={}", id);
+    log.info("DELETE /api/posts/id={}", id);
     postService.delete(id);
   }
 
