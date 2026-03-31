@@ -2,7 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.controller.dto.PostRequest;
 import com.example.demo.controller.dto.PostResponse;
-import com.example.demo.domain.PostEntity;
+import com.example.demo.entity.PostEntity;
 import com.example.demo.repository.PostRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

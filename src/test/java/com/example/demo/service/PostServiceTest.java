@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.example.demo.controller.dto.PostRequest;
 import com.example.demo.controller.dto.PostResponse;
-import com.example.demo.domain.PostEntity;
+import com.example.demo.entity.PostEntity;
 import com.example.demo.repository.PostRepository;
 import java.lang.reflect.Field;
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.example.demo.repository;
 
-import com.example.demo.domain.PostEntity;
+import com.example.demo.entity.PostEntity;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Repository;
