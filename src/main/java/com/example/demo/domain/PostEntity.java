@@ -1,15 +1,11 @@
 package com.example.demo.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 
-@Data
 @Getter
-@AllArgsConstructor
 public class PostEntity {
 
-  static private long AUTO_INCREMENT = 1L;
+  private static Long AUTO_INCREMENT = 1L;
 
   private final Long id;
   private String title;
@@ -21,6 +17,10 @@ public class PostEntity {
     this.title = title;
     this.content = content;
     this.author = author;
+  }
+
+  public static PostEntity of(String title, String content, String author) {
+    return new PostEntity(title, content, author);
   }
 
   public void update(String title, String content, String author) {

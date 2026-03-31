@@ -3,7 +3,7 @@ package com.example.demo.service;
 import com.example.demo.controller.dto.PostRequest;
 import com.example.demo.controller.dto.PostResponse;
 import com.example.demo.domain.PostEntity;
-import com.example.demo.repository.PostRepostiory;
+import com.example.demo.repository.PostRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,30 +12,30 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PostService {
 
-  private final PostRepostiory postRepostiory;
+  private final PostRepository postRepository;
 
   public PostResponse save(PostRequest request) {
-    PostEntity savedPost = postRepostiory.save(request);
-    return PostResponse.from(savedPost);
+    PostEntity savePost = PostEntity.of(request.title(), request.content(), request.author());
+    return PostResponse.from(postRepository.save(savePost));
   }
 
   public List<PostResponse> findAll() {
-    return postRepostiory.findAll().stream()
+    return postRepository.findAll().stream()
         .map(PostResponse::from)
         .toList();
   }
 
   public PostResponse findById(long userId) {
-    PostEntity findPost = postRepostiory.findById(userId);
+    PostEntity findPost = postRepository.findById(userId);
     return PostResponse.from(findPost);
   }
 
   public void update(long userId, PostRequest request) {
-    PostEntity targetPost = postRepostiory.findById(userId);
-    targetPost.update(request.getTitle(), request.getContent(), request.getAuthor());
+    PostEntity targetPost = postRepository.findById(userId);
+    targetPost.update(request.title(), request.content(), request.author());
   }
 
   public void delete(long id) {
-    postRepostiory.deleteById(id);
+    postRepository.deleteById(id);
   }
 }

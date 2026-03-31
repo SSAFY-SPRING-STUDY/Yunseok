@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import com.example.demo.controller.dto.PostRequest;
 import com.example.demo.controller.dto.PostResponse;
 import com.example.demo.domain.PostEntity;
-import com.example.demo.repository.PostRepostiory;
+import com.example.demo.repository.PostRepository;
 import java.lang.reflect.Field;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,13 +15,13 @@ import org.junit.jupiter.api.Test;
 class PostServiceTest {
 
   private PostService postService;
-  private PostRepostiory postRepostiory;
+  private PostRepository postRepository;
 
   @BeforeEach
   void setUp() throws Exception {
     resetAutoIncrement();
-    postRepostiory = new PostRepostiory();
-    postService = new PostService(postRepostiory);
+    postRepository = new PostRepository();
+    postService = new PostService(postRepository);
   }
 
   @Test
@@ -30,11 +30,11 @@ class PostServiceTest {
 
     List<PostResponse> posts = postService.findAll();
 
-    assertEquals(1L, savedPost.getId());
+    assertEquals(1L, savedPost.id());
     assertEquals(1, posts.size());
-    assertEquals("title-1", posts.get(0).getTitle());
-    assertEquals("content-1", posts.get(0).getContent());
-    assertEquals("author-1", posts.get(0).getAuthor());
+    assertEquals("title-1", posts.getFirst().title());
+    assertEquals("content-1", posts.getFirst().content());
+    assertEquals("author-1", posts.getFirst().author());
   }
 
   @Test
@@ -43,10 +43,10 @@ class PostServiceTest {
 
     PostResponse foundPost = postService.findById(1L);
 
-    assertEquals(1L, foundPost.getId());
-    assertEquals("title-1", foundPost.getTitle());
-    assertEquals("content-1", foundPost.getContent());
-    assertEquals("author-1", foundPost.getAuthor());
+    assertEquals(1L, foundPost.id());
+    assertEquals("title-1", foundPost.title());
+    assertEquals("content-1", foundPost.content());
+    assertEquals("author-1", foundPost.author());
   }
 
   @Test
@@ -56,9 +56,9 @@ class PostServiceTest {
     postService.update(1L, createRequest("title-2", "content-2", "author-2"));
 
     PostResponse updatedPost = postService.findById(1L);
-    assertEquals("title-2", updatedPost.getTitle());
-    assertEquals("content-2", updatedPost.getContent());
-    assertEquals("author-2", updatedPost.getAuthor());
+    assertEquals("title-2", updatedPost.title());
+    assertEquals("content-2", updatedPost.content());
+    assertEquals("author-2", updatedPost.author());
   }
 
   @Test
@@ -68,20 +68,16 @@ class PostServiceTest {
     postService.delete(1L);
 
     assertEquals(0, postService.findAll().size());
-    assertNull(postRepostiory.findById(1L));
+    assertNull(postRepository.findById(1L));
   }
 
   private PostRequest createRequest(String title, String content, String author) {
-    PostRequest request = new PostRequest();
-    request.setTitle(title);
-    request.setContent(content);
-    request.setAuthor(author);
-    return request;
+    return new PostRequest(title, content, author);
   }
 
   private void resetAutoIncrement() throws Exception {
     Field autoIncrementField = PostEntity.class.getDeclaredField("AUTO_INCREMENT");
     autoIncrementField.setAccessible(true);
-    autoIncrementField.setLong(null, 1L);
+    autoIncrementField.set(null, 1L);
   }
 }

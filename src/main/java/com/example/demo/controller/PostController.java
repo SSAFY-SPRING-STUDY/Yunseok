@@ -25,8 +25,6 @@ public class PostController {
 
   private final PostService postService;
 
-
-
   @GetMapping
   public List<PostResponse> findAllPost() {
     log.info("GET /api/posts");
@@ -43,11 +41,10 @@ public class PostController {
 
   @GetMapping("/{id}")
   public PostResponse findPostById(
-      @PathVariable String id
+      @PathVariable Long id
   ) {
     log.info("GET /api/posts/{}", id);
-    long userId = Long.parseLong(id);
-    return postService.findById(userId);
+    return postService.findById(id);
   }
 
   @PutMapping("/{id}")
@@ -65,6 +62,4 @@ public class PostController {
     log.info("DELETE /api/posts/id={}", id);
     postService.delete(id);
   }
-
-
 }
