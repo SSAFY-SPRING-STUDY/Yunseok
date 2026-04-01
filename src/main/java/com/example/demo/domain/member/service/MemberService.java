@@ -19,7 +19,8 @@ public class MemberService {
     return MemberResponse.from(e);
   }
 
-  public MemberResponse findme() {
-    return null;
+  public MemberResponse findme(Long id) {
+    MemberEntity memberEntity = memberRepository.findById(id);
+    return MemberResponse.from(memberEntity);
   }
 }

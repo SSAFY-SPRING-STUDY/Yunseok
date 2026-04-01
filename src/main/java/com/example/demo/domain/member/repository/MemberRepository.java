@@ -16,4 +16,18 @@ public class MemberRepository {
   public void save(MemberEntity e) {
     memberList.add(e);
   }
+
+  public MemberEntity find(String loginId, String password) {
+    return memberList.stream()
+        .filter(memberEntity -> memberEntity.getLoginId().equals(loginId) && memberEntity.getPassword().equals(password))
+        .findAny()
+        .orElse(null);
+  }
+
+  public MemberEntity findById(Long id) {
+    return memberList.stream()
+        .filter(memberEntity -> memberEntity.getId().equals(id))
+        .findAny()
+        .orElse(null);
+  }
 }
