@@ -4,6 +4,8 @@ import com.example.demo.domain.member.controller.dto.MemberRequest;
 import com.example.demo.domain.member.controller.dto.MemberResponse;
 import com.example.demo.domain.member.entity.MemberEntity;
 import com.example.demo.domain.member.repository.MemberRepository;
+import com.example.demo.global.exception.BusinessException;
+import com.example.demo.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,8 @@ public class MemberService {
   }
 
   public MemberResponse findme(Long id) {
-    MemberEntity memberEntity = memberRepository.findById(id);
+    MemberEntity memberEntity = memberRepository.findById(id)
+        .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
     return MemberResponse.from(memberEntity);
   }
 }

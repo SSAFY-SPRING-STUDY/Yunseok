@@ -1,33 +1,27 @@
 package com.example.demo.domain.member.repository;
 
 import com.example.demo.domain.member.entity.MemberEntity;
-import java.util.ArrayList;
 import java.util.Map;
-import java.util.UUID;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class MemberRepository {
 
-  private final ArrayList<MemberEntity> memberList = new ArrayList<>();
-  private final Map<UUID, String> memberStore = new ConcurrentHashMap<>();
+  private final Map<Long, MemberEntity> membersById = new ConcurrentHashMap<>();
+  private final Map<String, MemberEntity> membersByLoginId = new ConcurrentHashMap<>();
 
   public void save(MemberEntity e) {
-    memberList.add(e);
+    membersById.put(e.getId(), e);
+    membersByLoginId.put(e.getLoginId(), e);
   }
 
-  public MemberEntity find(String loginId, String password) {
-    return memberList.stream()
-        .filter(memberEntity -> memberEntity.getLoginId().equals(loginId) && memberEntity.getPassword().equals(password))
-        .findAny()
-        .orElse(null);
+  public Optional<MemberEntity> find(String loginId) {
+    return Optional.ofNullable(membersByLoginId.get(loginId));
   }
 
-  public MemberEntity findById(Long id) {
-    return memberList.stream()
-        .filter(memberEntity -> memberEntity.getId().equals(id))
-        .findAny()
-        .orElse(null);
+  public Optional<MemberEntity> findById(Long id) {
+    return Optional.ofNullable(membersById.get(id));
   }
 }

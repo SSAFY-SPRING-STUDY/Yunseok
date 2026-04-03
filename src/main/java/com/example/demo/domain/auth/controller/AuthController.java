@@ -5,7 +5,6 @@ import com.example.demo.domain.auth.controller.dto.LoginRequest;
 import com.example.demo.domain.auth.controller.dto.LoginResponse;
 import com.example.demo.domain.auth.service.AuthService;
 import com.example.demo.domain.member.controller.dto.MemberResponse;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,16 +26,11 @@ public class AuthController {
 
   @PostMapping("/login")
   public LoginResponse login(
-      HttpServletResponse response,
       @RequestBody LoginRequest request
   ) {
     log.info("POST /api/auth/login");
     MemberResponse target = authService.login(request);
-    if (target == null) {
-      throw new IllegalArgumentException("일치하는 회원 없음.");
-    }
-    String uuid = sessionManager.createSession(target.id(), response);
-    log.info("login created uuid={}", uuid);
+    String uuid = sessionManager.createSession(target.id());
     return LoginResponse.of(uuid);
   }
 
@@ -45,7 +39,7 @@ public class AuthController {
   public void logout(
       @RequestHeader("Authorization") String authHeader
   ) {
-    log.info("POST /api/auth/logout authHeader={}", authHeader);
+    log.info("POST /api/auth/logout");
     sessionManager.deleteSession(authHeader);
   }
 

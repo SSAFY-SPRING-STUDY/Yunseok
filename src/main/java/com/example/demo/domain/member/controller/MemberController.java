@@ -4,6 +4,8 @@ import com.example.demo.domain.auth.component.SessionManager;
 import com.example.demo.domain.member.controller.dto.MemberRequest;
 import com.example.demo.domain.member.controller.dto.MemberResponse;
 import com.example.demo.domain.member.service.MemberService;
+import com.example.demo.global.exception.BusinessException;
+import com.example.demo.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +36,9 @@ public class MemberController {
       @RequestHeader("Authorization") String authHeader
   ) {
     Long id = sessionManager.find(authHeader);
-    if (id == null) throw new IllegalArgumentException("일치하는 회원 없음.");
+    if (id == null)
+      throw new BusinessException(ErrorCode.UNAUTHORIZED);
+
     return memberService.findme(id);
   }
 
