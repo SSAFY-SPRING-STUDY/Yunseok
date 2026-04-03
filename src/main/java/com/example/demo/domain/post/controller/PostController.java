@@ -50,9 +50,9 @@ public class PostController {
   @PutMapping("/{id}")
   public void updatePost(
       @RequestBody PostRequest request,
-      @PathVariable("id") Long userId) {
-    log.info("PUT /api/posts/{}={}", userId, request);
-    postService.update(userId, request);
+      @PathVariable Long id) {
+    log.info("PUT /api/posts/{}={}", id, request);
+    postService.update(id, request);
   }
 
   @DeleteMapping("/{id}")

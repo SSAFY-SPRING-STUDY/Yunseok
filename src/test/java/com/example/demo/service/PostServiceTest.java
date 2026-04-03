@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.example.demo.domain.post.controller.dto.PostRequest;
 import com.example.demo.domain.post.controller.dto.PostResponse;
@@ -69,7 +69,7 @@ class PostServiceTest {
     postService.delete(1L);
 
     assertEquals(0, postService.findAll().size());
-    assertNull(postRepository.findById(1L));
+    assertTrue(postRepository.findById(1L).isEmpty());
   }
 
   private PostRequest createRequest(String title, String content, String author) {
