@@ -1,20 +1,19 @@
 package com.example.demo.global.exception;
 
 
-import com.example.demo.global.exception.dto.ErrorDtoResponse;
-import org.springframework.http.HttpStatus;
+import com.example.demo.global.response.ApiResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-  @ExceptionHandler(IllegalArgumentException.class)
-  @ResponseStatus(HttpStatus.UNAUTHORIZED)
-  public ErrorDtoResponse noneMember(IllegalArgumentException e) {
-    return new ErrorDtoResponse("AUTHORIZED", e.getMessage());
+  @ExceptionHandler(BusinessException.class)
+  public ResponseEntity<ApiResponse<Void>> noneMember(BusinessException e) {
+    ErrorCode errorCode = e.getErrorCode();
+    return ResponseEntity.status(errorCode.getStatus())
+        .body(ApiResponse.error(errorCode));
   }
-
 
 }
