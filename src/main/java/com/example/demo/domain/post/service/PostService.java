@@ -1,9 +1,11 @@
-package com.example.demo.service;
+package com.example.demo.domain.post.service;
 
-import com.example.demo.controller.dto.PostRequest;
-import com.example.demo.controller.dto.PostResponse;
-import com.example.demo.entity.PostEntity;
-import com.example.demo.repository.PostRepository;
+import com.example.demo.domain.post.controller.dto.PostRequest;
+import com.example.demo.domain.post.controller.dto.PostResponse;
+import com.example.demo.domain.post.entity.PostEntity;
+import com.example.demo.domain.post.repository.PostRepository;
+import com.example.demo.global.exception.BusinessException;
+import com.example.demo.global.exception.ErrorCode;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,16 +28,18 @@ public class PostService {
   }
 
   public PostResponse findById(long userId) {
-    PostEntity findPost = postRepository.findById(userId);
+    PostEntity findPost = postRepository.findById(userId)
+        .orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND));
     return PostResponse.from(findPost);
   }
 
-  public void update(long userId, PostRequest request) {
-    PostEntity targetPost = postRepository.findById(userId);
+  public void update(long id, PostRequest request) {
+    PostEntity targetPost = postRepository.findById(id)
+        .orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND));
     targetPost.update(request.title(), request.content(), request.author());
   }
 
-  public void delete(long id) {
+  public void delete(Long id) {
     postRepository.deleteById(id);
   }
 }

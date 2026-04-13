@@ -1,8 +1,8 @@
-package com.example.demo.controller;
+package com.example.demo.domain.post.controller;
 
-import com.example.demo.controller.dto.PostRequest;
-import com.example.demo.controller.dto.PostResponse;
-import com.example.demo.service.PostService;
+import com.example.demo.domain.post.controller.dto.PostRequest;
+import com.example.demo.domain.post.controller.dto.PostResponse;
+import com.example.demo.domain.post.service.PostService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,9 +50,9 @@ public class PostController {
   @PutMapping("/{id}")
   public void updatePost(
       @RequestBody PostRequest request,
-      @PathVariable("id") Long userId) {
-    log.info("PUT /api/posts/{}={}", userId, request);
-    postService.update(userId, request);
+      @PathVariable Long id) {
+    log.info("PUT /api/posts/{}={}", id, request);
+    postService.update(id, request);
   }
 
   @DeleteMapping("/{id}")
