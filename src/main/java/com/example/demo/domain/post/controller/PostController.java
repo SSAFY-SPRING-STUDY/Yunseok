@@ -3,6 +3,7 @@ package com.example.demo.domain.post.controller;
 import com.example.demo.domain.post.controller.dto.PostRequest;
 import com.example.demo.domain.post.controller.dto.PostResponse;
 import com.example.demo.domain.post.service.PostService;
+import com.example.demo.global.response.ApiResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,40 +27,46 @@ public class PostController {
   private final PostService postService;
 
   @GetMapping
-  public List<PostResponse> findAllPost() {
+  @ResponseStatus(HttpStatus.OK)
+  public ApiResponse<List<PostResponse>> findAllPost() {
     log.info("GET /api/posts");
-    return postService.findAll();
+    return ApiResponse.success("게시글 전체 조회.", postService.findAll());
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public PostResponse createPost(
+  public ApiResponse<PostResponse> createPost(
       @RequestBody PostRequest postRequest) {
     log.info("POST /api/posts={}", postRequest);
-    return postService.save(postRequest);
+    return ApiResponse.success("게시글 작성되었습니다.", postService.save(postRequest));
   }
 
   @GetMapping("/{id}")
-  public PostResponse findPostById(
+  @ResponseStatus(HttpStatus.OK)
+  public ApiResponse<PostResponse> findPostById(
       @PathVariable Long id
   ) {
     log.info("GET /api/posts/{}", id);
-    return postService.findById(id);
+    return ApiResponse.success("ID로 게시글 조회.", postService.findById(id));
   }
 
   @PutMapping("/{id}")
-  public void updatePost(
+  @ResponseStatus(HttpStatus.OK)
+  public ApiResponse<Void> updatePost(
       @RequestBody PostRequest request,
       @PathVariable Long id) {
     log.info("PUT /api/posts/{}={}", id, request);
     postService.update(id, request);
+    return ApiResponse.success("ID에 해당하는 게시글 업데이트.");
   }
 
   @DeleteMapping("/{id}")
-  public void deletePost(
+  @ResponseStatus(HttpStatus.OK)
+  public ApiResponse<Void> deletePost(
       @PathVariable Long id
   ) {
     log.info("DELETE /api/posts/id={}", id);
     postService.delete(id);
+    return ApiResponse.success("ID에 해당하는 게시글 삭제.");
   }
 }

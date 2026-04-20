@@ -8,20 +8,23 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorCode {
 
-  // 인증
-  UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증되지 않은 사용자입니다"),
+  // 요청(400)
+  INVALID_PARAMETER(HttpStatus.BAD_REQUEST, "잘못된 요청 파라미터입니다."),
 
-  // 회원
-  MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "일치하는 회원 없음"),
+  // 인증(401)
+  UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "로그인이 필요한 서비스입니다."),
 
-  // 게시글
-  POST_NOT_FOUND(HttpStatus.NOT_FOUND, "일치하는 게시글 없음"),
+  //본인 글이 아닌데 수정/삭제 시도(403)
+  INVALID_PERMISSION(HttpStatus.FORBIDDEN, "해당 권한이 없습니다."),
 
-  // 요청
-  INVALID_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다"),
+  // 회원(404)
+  MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
 
-  // 서버
-  INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류");
+  // 게시글(404)
+  POST_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 게시글입니다."),
+
+  // 서버(500)
+  INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부에 오류가 발생했습니다.");
 
   private final HttpStatus status;
   private final String message;

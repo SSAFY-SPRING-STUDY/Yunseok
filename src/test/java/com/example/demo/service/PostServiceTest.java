@@ -27,7 +27,7 @@ class PostServiceTest {
 
   @Test
   void saveAndFindAll() {
-    PostResponse savedPost = postService.save(createRequest("title-1", "content-1", "author-1"));
+    PostResponse savedPost = postService.save(createRequest("title-1", "content-1", 1L));
 
     List<PostResponse> posts = postService.findAll();
 
@@ -35,36 +35,36 @@ class PostServiceTest {
     assertEquals(1, posts.size());
     assertEquals("title-1", posts.getFirst().title());
     assertEquals("content-1", posts.getFirst().content());
-    assertEquals("author-1", posts.getFirst().author());
+    assertEquals(1L, posts.getFirst().authorId());
   }
 
   @Test
   void findById() {
-    postService.save(createRequest("title-1", "content-1", "author-1"));
+    postService.save(createRequest("title-1", "content-1", 1L));
 
     PostResponse foundPost = postService.findById(1L);
 
     assertEquals(1L, foundPost.id());
     assertEquals("title-1", foundPost.title());
     assertEquals("content-1", foundPost.content());
-    assertEquals("author-1", foundPost.author());
+    assertEquals("author-1", foundPost.authorId());
   }
 
   @Test
   void update() {
-    postService.save(createRequest("title-1", "content-1", "author-1"));
+    postService.save(createRequest("title-1", "content-1", 1L));
 
-    postService.update(1L, createRequest("title-2", "content-2", "author-2"));
+    postService.update(1L, createRequest("title-2", "content-2", 2L));
 
     PostResponse updatedPost = postService.findById(1L);
     assertEquals("title-2", updatedPost.title());
     assertEquals("content-2", updatedPost.content());
-    assertEquals("author-2", updatedPost.author());
+    assertEquals(2L, updatedPost.authorId());
   }
 
   @Test
   void delete() {
-    postService.save(createRequest("title-1", "content-1", "author-1"));
+    postService.save(createRequest("title-1", "content-1", 1L));
 
     postService.delete(1L);
 
@@ -72,8 +72,8 @@ class PostServiceTest {
     assertTrue(postRepository.findById(1L).isEmpty());
   }
 
-  private PostRequest createRequest(String title, String content, String author) {
-    return new PostRequest(title, content, author);
+  private PostRequest createRequest(String title, String content, Long authorId) {
+    return new PostRequest(title, content, authorId);
   }
 
   private void resetAutoIncrement() throws Exception {

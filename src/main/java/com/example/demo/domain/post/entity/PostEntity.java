@@ -1,5 +1,6 @@
 package com.example.demo.domain.post.entity;
 
+import com.example.demo.domain.post.controller.dto.PostRequest;
 import lombok.Getter;
 
 @Getter
@@ -10,22 +11,26 @@ public class PostEntity {
   private final Long id;
   private String title;
   private String content;
-  private String author;
+  private Long authorId;
 
-  public PostEntity(String title, String content, String author) {
+  public PostEntity(String title, String content, Long authorId) {
     id = AUTO_INCREMENT++;
     this.title = title;
     this.content = content;
-    this.author = author;
+    this.authorId = authorId;
   }
 
-  public static PostEntity of(String title, String content, String author) {
-    return new PostEntity(title, content, author);
+  public static PostEntity from(PostRequest request) {
+    return new PostEntity(request.title(), request.content(), request.authorId());
   }
 
-  public void update(String title, String content, String author) {
+  public static PostEntity of(String title, String content, Long authorId) {
+    return new PostEntity(title, content, authorId);
+  }
+
+  public void update(String title, String content, Long authorId) {
     this.title = title;
     this.content = content;
-    this.author = author;
+    this.authorId = authorId;
   }
 }
