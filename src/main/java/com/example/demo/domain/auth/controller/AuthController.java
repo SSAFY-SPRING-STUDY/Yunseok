@@ -5,6 +5,7 @@ import com.example.demo.domain.auth.controller.dto.LoginRequest;
 import com.example.demo.domain.auth.controller.dto.LoginResponse;
 import com.example.demo.domain.auth.service.AuthService;
 import com.example.demo.domain.member.controller.dto.MemberResponse;
+import com.example.demo.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,22 +26,23 @@ public class AuthController {
   private final AuthService authService;
 
   @PostMapping("/login")
-  public LoginResponse login(
+  public ApiResponse<LoginResponse> login(
       @RequestBody LoginRequest request
   ) {
     log.info("POST /api/auth/login");
     MemberResponse target = authService.login(request);
     String uuid = sessionManager.createSession(target.id());
-    return LoginResponse.of(uuid);
+    return ApiResponse.success("로그인 되었습니다.", LoginResponse.of(uuid));
   }
 
   @PostMapping("/logout")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void logout(
+  @ResponseStatus(HttpStatus.OK)
+  public ApiResponse<Void> logout(
       @RequestHeader("Authorization") String authHeader
   ) {
     log.info("POST /api/auth/logout");
     sessionManager.deleteSession(authHeader);
+    return ApiResponse.success("로그아웃이 완료되었습니다.");
   }
 
 }

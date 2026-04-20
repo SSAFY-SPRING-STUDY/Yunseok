@@ -6,6 +6,7 @@ import com.example.demo.domain.member.controller.dto.MemberResponse;
 import com.example.demo.domain.member.service.MemberService;
 import com.example.demo.global.exception.BusinessException;
 import com.example.demo.global.exception.ErrorCode;
+import com.example.demo.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,20 +27,20 @@ public class MemberController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public MemberResponse createMember(
+  public ApiResponse<MemberResponse> createMember(
       @RequestBody MemberRequest request) {
-    return memberService.createMember(request);
+    return ApiResponse.success("회원가입 되었습니다.", memberService.createMember(request));
   }
 
   @GetMapping("/me")
-  public MemberResponse findme(
+  public ApiResponse<MemberResponse> findme(
       @RequestHeader("Authorization") String authHeader
   ) {
     Long id = sessionManager.find(authHeader);
-    if (id == null)
+    if (id == null) {
       throw new BusinessException(ErrorCode.UNAUTHORIZED);
-
-    return memberService.findme(id);
+    }
+    return ApiResponse.success("내 정보 조회.", memberService.findme(id));
   }
 
 }

@@ -17,7 +17,7 @@ public class PostService {
   private final PostRepository postRepository;
 
   public PostResponse save(PostRequest request) {
-    PostEntity savePost = PostEntity.of(request.title(), request.content(), request.author());
+    PostEntity savePost = PostEntity.from(request);
     return PostResponse.from(postRepository.save(savePost));
   }
 
@@ -36,7 +36,7 @@ public class PostService {
   public void update(long id, PostRequest request) {
     PostEntity targetPost = postRepository.findById(id)
         .orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND));
-    targetPost.update(request.title(), request.content(), request.author());
+    targetPost.update(request.title(), request.content(), request.authorId());
   }
 
   public void delete(Long id) {
